@@ -30,28 +30,28 @@ export function fetchMovies() {
   });
 
   return {
-    type: FETCH_POSTS,
+    type: FETCH_MOVIES,
     payload: request
   };
 }
 
 export function fetchMoviesSuccess(movies) {
   return {
-    type: FETCH_POSTS_SUCCESS,
+    type: FETCH_MOVIES_SUCCESS,
     payload: movies
   };
 }
 
 export function fetchMoviesFailure(error) {
   return {
-    type: FETCH_POSTS_FAILURE,
+    type: FETCH_MOVIES_FAILURE,
     payload: error
   };
 }
 
 export function createMovie(props, tokenFromStorage) {
   const request = axios({
-    method: 'movie',
+    method: 'post',
     data: props,
     url: `${ROOT_URL}/movies`,
     headers: {
@@ -60,21 +60,21 @@ export function createMovie(props, tokenFromStorage) {
   });
 
   return {
-    type: CREATE_POST,
+    type: CREATE_MOVIE,
     payload: request
   };
 }
 
 export function createMovieSuccess(newMovie) {
   return {
-    type: CREATE_POST_SUCCESS,
+    type: CREATE_MOVIE_SUCCESS,
     payload: newMovie
   };
 }
 
 export function createMovieFailure(error) {
   return {
-    type: CREATE_POST_FAILURE,
+    type: CREATE_MOVIE_FAILURE,
     payload: error
   };
 }
@@ -83,7 +83,7 @@ export function fetchMovie(id) {
   const request = axios.get(`${ROOT_URL}/movies/${id}`);
 
   return {
-    type: FETCH_POST,
+    type: FETCH_MOVIE,
     payload: request
   };
 }
@@ -91,14 +91,14 @@ export function fetchMovie(id) {
 
 export function fetchMovieSuccess(activeMovie) {
   return {
-    type: FETCH_POST_SUCCESS,
+    type: FETCH_MOVIE_SUCCESS,
     payload: activeMovie
   };
 }
 
 export function fetchMovieFailure(error) {
   return {
-    type: FETCH_POST_FAILURE,
+    type: FETCH_MOVIE_FAILURE,
     payload: error
   };
 }
@@ -112,21 +112,21 @@ export function deleteMovie(id, tokenFromStorage) {
     }
   });
   return {
-    type: DELETE_POST,
+    type: DELETE_MOVIE,
     payload: request
   };
 }
 
 export function deleteMovieSuccess(deletedMovie) {
   return {
-    type: DELETE_POST_SUCCESS,
+    type: DELETE_MOVIE_SUCCESS,
     payload: deletedMovie
   };
 }
 
 export function deleteMovieFailure(response) {
   return {
-    type: DELETE_POST_FAILURE,
+    type: DELETE_MOVIE_FAILURE,
     payload: response
   };
 }
