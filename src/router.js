@@ -9,7 +9,9 @@ import NotFound from "./components/NotFound";
 const router = (
     <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
         <Route path="/" component={App}>
-            <IndexRoute component={Home}/>
+            <IndexRoute component={MoviesIndex} />
+            <Route path="movies/new" component={MoviesNew} />
+            <Route path="movies/:id" component={MoviesShow} />
             <Route path="*" component={NotFound}/>
         </Route>
     </Router>

@@ -8,9 +8,9 @@ import {
 
 const INITIAL_STATE = { 
     moviesList: {movies: [], error:null, loading: false},  
-	newMovie:{movie:null, error: null, loading: false}, 
-	activeMovie:{movie:null, error:null, loading: false}, 
-	deletedMovie: {movie: null, error:null, loading: false},
+	  newMovie:{movie:null, error: null, loading: false}, 
+	  activeMovie:{movie:null, error:null, loading: false}, 
+	  deletedMovie: {movie: null, error:null, loading: false},
 };
 
 export default function(state = INITIAL_STATE, action) {
