@@ -1,5 +1,5 @@
-import { connect } from 'react-redux'
-import { fetchMovies, fetchMoviesSuccess, fetchMoviesFailure } from '../actions/movies';
+import {connect} from 'react-redux'
+import {fetchMovies, fetchMoviesSuccess, fetchMoviesFailure} from '../actions/movies';
 import MoviesList from '../components/MoviesList';
 
 

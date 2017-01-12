@@ -1,6 +1,6 @@
 import MovieDetails from '../components/MovieDetails.js';
-import { fetchMovie, fetchMovieSuccess, fetchMovieFailure, resetActiveMovie, resetDeletedMovie } from '../actions/movies';
-import { connect } from 'react-redux';
+import {fetchMovie, fetchMovieSuccess, fetchMovieFailure, resetActiveMovie, resetDeletedMovie} from '../actions/movies';
+import {connect} from 'react-redux';
 
 function mapStateToProps(globalState, ownProps) {
     return {

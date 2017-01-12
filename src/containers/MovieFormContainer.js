@@ -9,7 +9,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(resetNewMovie());
         }
     }
-}
+};
 
 
 function mapStateToProps(state, ownProps) {

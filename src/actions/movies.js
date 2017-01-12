@@ -6,7 +6,7 @@ export const FETCH_MOVIES_SUCCESS = 'FETCH_MOVIES_SUCCESS';
 export const FETCH_MOVIES_FAILURE = 'FETCH_MOVIES_FAILURE';
 
 //Create new movie
-export const CREATE_MOVIES = 'CREATE_MOVIE';
+export const CREATE_MOVIE = 'CREATE_MOVIE';
 export const CREATE_MOVIE_SUCCESS = 'CREATE_MOVIE_SUCCESS';
 export const CREATE_MOVIE_FAILURE = 'CREATE_MOVIE_FAILURE';
 
@@ -23,110 +23,110 @@ export const DELETE_MOVIE_FAILURE = 'DELETE_MOVIE_FAILURE';
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
 
 export function fetchMovies() {
-  const request = axios({
-    method: 'get',
-    url: `${ROOT_URL}/movies`,
-    headers: []
-  });
+    const request = axios({
+        method: 'get',
+        url: `${ROOT_URL}/movies`,
+        headers: []
+    });
 
-  return {
-    type: FETCH_MOVIES,
-    payload: request
-  };
+    return {
+        type: FETCH_MOVIES,
+        payload: request
+    };
 }
 
 export function fetchMoviesSuccess(movies) {
-  return {
-    type: FETCH_MOVIES_SUCCESS,
-    payload: movies
-  };
+    return {
+        type: FETCH_MOVIES_SUCCESS,
+        payload: movies
+    };
 }
 
 export function fetchMoviesFailure(error) {
-  return {
-    type: FETCH_MOVIES_FAILURE,
-    payload: error
-  };
+    return {
+        type: FETCH_MOVIES_FAILURE,
+        payload: error
+    };
 }
 
 export function createMovie(props, tokenFromStorage) {
-  const request = axios({
-    method: 'post',
-    data: props,
-    url: `${ROOT_URL}/movies`,
-    headers: {
-      'Authorization': `Bearer ${tokenFromStorage}`
-    }
-  });
+    const request = axios({
+        method: 'post',
+        data: props,
+        url: `${ROOT_URL}/movies`,
+        headers: {
+            'Authorization': `Bearer ${tokenFromStorage}`
+        }
+    });
 
-  return {
-    type: CREATE_MOVIE,
-    payload: request
-  };
+    return {
+        type: CREATE_MOVIE,
+        payload: request
+    };
 }
 
 export function createMovieSuccess(newMovie) {
-  return {
-    type: CREATE_MOVIE_SUCCESS,
-    payload: newMovie
-  };
+    return {
+        type: CREATE_MOVIE_SUCCESS,
+        payload: newMovie
+    };
 }
 
 export function createMovieFailure(error) {
-  return {
-    type: CREATE_MOVIE_FAILURE,
-    payload: error
-  };
+    return {
+        type: CREATE_MOVIE_FAILURE,
+        payload: error
+    };
 }
 
 export function fetchMovie(id) {
-  const request = axios.get(`${ROOT_URL}/movies/${id}`);
+    const request = axios.get(`${ROOT_URL}/movies/${id}`);
 
-  return {
-    type: FETCH_MOVIE,
-    payload: request
-  };
+    return {
+        type: FETCH_MOVIE,
+        payload: request
+    };
 }
 
 
 export function fetchMovieSuccess(activeMovie) {
-  return {
-    type: FETCH_MOVIE_SUCCESS,
-    payload: activeMovie
-  };
+    return {
+        type: FETCH_MOVIE_SUCCESS,
+        payload: activeMovie
+    };
 }
 
 export function fetchMovieFailure(error) {
-  return {
-    type: FETCH_MOVIE_FAILURE,
-    payload: error
-  };
+    return {
+        type: FETCH_MOVIE_FAILURE,
+        payload: error
+    };
 }
 
 export function deleteMovie(id, tokenFromStorage) {
-  const request = axios({
-    method: 'delete',
-    url: `${ROOT_URL}/movies/${id}`,
-    headers: {
-      'Authorization': `Bearer ${tokenFromStorage}`
-    }
-  });
-  return {
-    type: DELETE_MOVIE,
-    payload: request
-  };
+    const request = axios({
+        method: 'delete',
+        url: `${ROOT_URL}/movies/${id}`,
+        headers: {
+            'Authorization': `Bearer ${tokenFromStorage}`
+        }
+    });
+    return {
+        type: DELETE_MOVIE,
+        payload: request
+    };
 }
 
 export function deleteMovieSuccess(deletedMovie) {
-  return {
-    type: DELETE_MOVIE_SUCCESS,
-    payload: deletedMovie
-  };
+    return {
+        type: DELETE_MOVIE_SUCCESS,
+        payload: deletedMovie
+    };
 }
 
 export function deleteMovieFailure(response) {
-  return {
-    type: DELETE_MOVIE_FAILURE,
-    payload: response
-  };
+    return {
+        type: DELETE_MOVIE_FAILURE,
+        payload: response
+    };
 }

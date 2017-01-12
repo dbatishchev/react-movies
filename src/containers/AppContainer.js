@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken } from '../actions/users';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken} from '../actions/users';
 import App from '../components/App.js';
 
 const mapDispatchToProps = (dispatch) => {
     return {
         loadUserFromToken: () => {
             let token = sessionStorage.getItem('jwtToken');
-            if(!token || token === '') {//if there is no token, dont bother
+            if (!token || token === '') {//if there is no token, dont bother
                 return;
             }
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 });
         },
-        resetMe: () =>{
+        resetMe: () => {
             sessionStorage.removeItem('jwtToken'); //remove token from storage
             dispatch(resetToken());
         }
