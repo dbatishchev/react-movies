@@ -1,17 +1,11 @@
-import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import MainContainer from "./MainContainer";
+import React from 'react';
+import { Component } from 'react';
 
-export default class App extends React.Component {
+export default class App extends Component {
     render() {
         return (
             <div>
-                <Header></Header>
-                <MainContainer>
-                    {this.props.children}
-                </MainContainer>
-                <Footer></Footer>
+                {this.props.children}
             </div>
         );
     }
