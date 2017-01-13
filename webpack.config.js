@@ -16,6 +16,7 @@ var plugins = [
 
 webpackConfig = {
     entry: "./src/index.js",
+    devtool: "eval",
     module: {
         loaders: [
             {
@@ -26,6 +27,7 @@ webpackConfig = {
         ]
     },
     devServer: {
+        historyApiFallback: true,
         contentBase: __dirname,
     },
     plugins: plugins,

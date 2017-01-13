@@ -7,16 +7,18 @@ const mapStateToProps = (state) => {
     return {
         moviesList: state.movies.moviesList
     };
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchMovies: () => {
-            dispatch(fetchMovies()).then((response) => {
-                !response.error ? dispatch(fetchMoviesSuccess(response.payload.data)) : dispatch(fetchMoviesFailure(response.payload.data));
-            });
+            dispatch(fetchMovies())
+                .payload
+                .then((response) => {
+                    !response.error ? dispatch(fetchMoviesSuccess(response.payload.data)) : dispatch(fetchMoviesFailure(response.payload.data));
+                });
         }
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoviesList);
