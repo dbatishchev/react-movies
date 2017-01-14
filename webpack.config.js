@@ -1,27 +1,33 @@
-var path = require('path');
-var webpack = require("webpack");
+const path = require("path");
+const webpack = require("webpack");
 
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var plugins = [
+const buildPath = path.resolve(__dirname, "public", "build");
+
+const plugins = [
     new HtmlWebpackPlugin({
-        template: 'static/index.html',
+        template: "static/index.html",
         hash: true
     }),
-    new ExtractTextPlugin('[name].css', {
+    new ExtractTextPlugin("[name].css", {
         allChunks: true
     })
 ];
 
-webpackConfig = {
+const webpackConfig = {
     entry: "./src/index.js",
+    output: {
+        path: buildPath,
+        filename: "bundle.js",
+    },
     devtool: "eval",
     module: {
         loaders: [
             {
                 test: /\.js$/,
-                loader: 'babel',
+                loader: "babel",
                 exclude: [/node_modules/],
             }
         ]

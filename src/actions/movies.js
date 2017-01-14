@@ -1,30 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
 
 //Movie list
-export const FETCH_MOVIES = 'FETCH_MOVIES';
-export const FETCH_MOVIES_SUCCESS = 'FETCH_MOVIES_SUCCESS';
-export const FETCH_MOVIES_FAILURE = 'FETCH_MOVIES_FAILURE';
+export const FETCH_MOVIES = "FETCH_MOVIES";
+export const FETCH_MOVIES_SUCCESS = "FETCH_MOVIES_SUCCESS";
+export const FETCH_MOVIES_FAILURE = "FETCH_MOVIES_FAILURE";
 
 //Create new movie
-export const CREATE_MOVIE = 'CREATE_MOVIE';
-export const CREATE_MOVIE_SUCCESS = 'CREATE_MOVIE_SUCCESS';
-export const CREATE_MOVIE_FAILURE = 'CREATE_MOVIE_FAILURE';
+export const CREATE_MOVIE = "CREATE_MOVIE";
+export const CREATE_MOVIE_SUCCESS = "CREATE_MOVIE_SUCCESS";
+export const CREATE_MOVIE_FAILURE = "CREATE_MOVIE_FAILURE";
 
 //Fetch movie
-export const FETCH_MOVIE = 'FETCH_MOVIE';
-export const FETCH_MOVIE_SUCCESS = 'FETCH_MOVIE_SUCCESS';
-export const FETCH_MOVIE_FAILURE = 'FETCH_MOVIE_FAILURE';
+export const FETCH_MOVIE = "FETCH_MOVIE";
+export const FETCH_MOVIE_SUCCESS = "FETCH_MOVIE_SUCCESS";
+export const FETCH_MOVIE_FAILURE = "FETCH_MOVIE_FAILURE";
 
 //Delete movie
-export const DELETE_MOVIE = 'DELETE_MOVIE';
-export const DELETE_MOVIE_SUCCESS = 'DELETE_MOVIE_SUCCESS';
-export const DELETE_MOVIE_FAILURE = 'DELETE_MOVIE_FAILURE';
+export const DELETE_MOVIE = "DELETE_MOVIE";
+export const DELETE_MOVIE_SUCCESS = "DELETE_MOVIE_SUCCESS";
+export const DELETE_MOVIE_FAILURE = "DELETE_MOVIE_FAILURE";
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+const ROOT_URL = location.href.indexOf("localhost") > 0 ? "http://localhost:3000/api" : "/api";
 
 export function fetchMovies() {
     const request = axios({
-        method: 'get',
+        method: "get",
         url: `${ROOT_URL}/movies`,
         headers: []
     });
@@ -51,11 +51,11 @@ export function fetchMoviesFailure(error) {
 
 export function createMovie(props, tokenFromStorage) {
     const request = axios({
-        method: 'post',
+        method: "post",
         data: props,
         url: `${ROOT_URL}/movies`,
         headers: {
-            'Authorization': `Bearer ${tokenFromStorage}`
+            "Authorization": `Bearer ${tokenFromStorage}`
         }
     });
 
@@ -105,10 +105,10 @@ export function fetchMovieFailure(error) {
 
 export function deleteMovie(id, tokenFromStorage) {
     const request = axios({
-        method: 'delete',
+        method: "delete",
         url: `${ROOT_URL}/movies/${id}`,
         headers: {
-            'Authorization': `Bearer ${tokenFromStorage}`
+            "Authorization": `Bearer ${tokenFromStorage}`
         }
     });
     return {
