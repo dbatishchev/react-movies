@@ -1,13 +1,13 @@
 import React from "react";
-import {Router, Route, IndexRoute} from "react-router";
-import {history} from "./store.js";
-import App from "./components/App";
-import Home from "./components/Home";
+import {Router, Route, IndexRoute, browserHistory} from "react-router";
 import NotFound from "./components/NotFound";
+import App from './pages/App';
+import MoviesIndex from './pages/MoviesIndex';
+import MoviesNew from './pages/MoviesNew';
+import MoviesShow from './pages/MoviesShow';
 
-// build the router
-const router = (
-    <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
+export default (
+    <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={MoviesIndex}/>
             <Route path="movies/new" component={MoviesNew}/>
@@ -16,6 +16,3 @@ const router = (
         </Route>
     </Router>
 );
-
-// export
-export {router};
