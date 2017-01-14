@@ -1,9 +1,19 @@
 import path from "path";
 import express from "express";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import Movie from "./server/models/movie";
 
 const isDeveloping = process.env.NODE_ENV !== "production";
 const port = isDeveloping ? 3000 : process.env.PORT;
 const app = express();
+
+// init database connection
+mongoose.connect("mongodb://127.0.0.1:27017/movies");
+
+// configure body parser
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 if (isDeveloping) {
     let webpack = require("webpack");
@@ -28,16 +38,25 @@ if (isDeveloping) {
     const bundlePath = path.join(__dirname, "./public/build/index.html");
 
     app.use(middleware);
-    app.get("*", function response(req, res) {
+    app.get("/", function response(req, res) {
         res.write(middleware.fileSystem.readFileSync(bundlePath));
         res.end();
     });
 } else {
     app.use(express.static(__dirname + "./public/build"));
-    app.get("*", function response(req, res) {
+    app.get("/", function response(req, res) {
         res.sendFile(path.join(__dirname, "./public/build/index.html"));
     });
 }
+
+app.get("/api/movies", function (req, res) {
+    Movie.find(function (err, bears) {
+        if (err) {
+            res.send(err);
+        }
+        res.json(bears);
+    });
+});
 
 app.listen(port, "0.0.0.0", function onStart(err) {
     if (err) {

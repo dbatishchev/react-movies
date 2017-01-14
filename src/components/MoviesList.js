@@ -6,23 +6,13 @@ class MoviesList extends Component {
         this.props.fetchMovies();
     }
 
-    renderCategories(categories) {
-        return categories.map((c) => {
-            c = c.trim();
-            return (
-                <Link to={"filter/" + c} key={c} className="list-group-item-text">{" " + c + " "}</Link>
-            );
-        });
-    }
-
     renderMovies(movies) {
         return movies.map((movie) => {
             return (
                 <li className="list-group-item" key={movie._id}>
-                    <Link style={{color: 'black'}} to={"movies/" + movie._id}>
+                    <Link style={{color: "black"}} to={"movies/" + movie._id}>
                         <h3 className="list-group-item-heading">{movie.title}</h3>
                     </Link>
-                    {this.renderCategories(movie.categories)}
                 </li>
             );
         });

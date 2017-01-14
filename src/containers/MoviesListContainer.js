@@ -15,7 +15,11 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchMovies())
                 .payload
                 .then((response) => {
-                    !response.error ? dispatch(fetchMoviesSuccess(response.payload.data)) : dispatch(fetchMoviesFailure(response.payload.data));
+                    if (!response.error) {
+                        dispatch(fetchMoviesSuccess(response.data));
+                    } else {
+                        dispatch(fetchMoviesFailure(response.data));
+                    }
                 });
         }
     }
