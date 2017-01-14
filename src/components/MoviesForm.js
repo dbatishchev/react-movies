@@ -33,9 +33,9 @@ const asyncValidate = (values, dispatch) => {
                 return;
             }
 
-            let {data, status} = result.payload.response;
+            let {data} = result.payload.response;
             //if status is not 200 or any one of the fields exist, then there is a field error
-            if (response.payload.status != 200 || data.title || data.categories || data.description) {
+            if (response.payload.status !== 200 || data.title || data.categories || data.description) {
                 //let other components know of error by updating the redux` state
                 dispatch(validateMovieFieldsFailure(data));
                 throw data; //throw error
