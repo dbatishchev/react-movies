@@ -1,66 +1,97 @@
-import path from "path";
-import express from "express";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import Movie from "./server/models/movie";
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+// const routes = require('./server/routes');
+const path = require('path');
+// const models = require('./server/models');
+// const middleware = require('./server/middleware');
+const passport = require('passport');
+const errorhandler = require('errorhandler');
 
-const isDeveloping = process.env.NODE_ENV !== "production";
-const port = isDeveloping ? 3000 : process.env.PORT;
+const oauth2 = require('./server/auth/oauth2');
+const users = require('./server/routes/users');
+// const movies = require('./server/routes/movies');
+
 const app = express();
 
-// init database connection
-mongoose.connect("mongodb://127.0.0.1:27017/movies");
+app.set('env', process.env.NODE_ENV || 'development');
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'server/views'));
+app.set('view engine', 'jade');
 
-// configure body parser
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+// app.locals.title = 'OAuth Example';
+// app.locals.pretty = true;
 
-if (isDeveloping) {
-    let webpack = require("webpack");
-    let webpackMiddleware = require("webpack-dev-middleware");
-    let config = require("./webpack.config.js");
+app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(cookieParser('ncie0fnft6wjfmgtjz8i'));
+app.use(cookieParser());
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    maxAge: 48 * 60 * 60 * 1000,
+}));
+app.use(methodOverride());
+app.use(passport.initialize());
+app.use(express.static(path.join(__dirname, 'public')));
 
-    const compiler = webpack(config);
-    const middleware = webpackMiddleware(compiler, {
-        publicPath: config.output.publicPath,
-        noInfo: true,
-        quiet: false,
-        lazy: false,
-        watchOptions: {
-            aggregateTimeout: 300,
-            poll: true
-        },
-        stats: {
-            colors: true
-        }
-    });
+// app.oauth = oauthserver({
+//     model: models.oauth,
+//     grants: ['password', 'authorization_code', 'refresh_token'],
+//     debug: true,
+// });
 
-    const bundlePath = path.join(__dirname, "./public/build/index.html");
-
-    app.use(middleware);
-    app.get("/", function response(req, res) {
-        res.write(middleware.fileSystem.readFileSync(bundlePath));
-        res.end();
-    });
-} else {
-    app.use(express.static(__dirname + "./public/build"));
-    app.get("/", function response(req, res) {
-        res.sendFile(path.join(__dirname, "./public/build/index.html"));
-    });
+if (app.get('env') === 'development') {
+    app.use(errorhandler());
 }
 
-app.get("/api/movies", function (req, res) {
-    Movie.find(function (err, bears) {
-        if (err) {
-            res.send(err);
-        }
-        res.json(bears);
-    });
-});
+// app.get('/', middleware.loadUser, routes.index);
 
-app.listen(port, "0.0.0.0", function onStart(err) {
+// app.use('/api/movies', movies);
+app.use('/api/users', users);
+app.use('/api/oauth/token', oauth2.token);
+
+// app.all('/oauth/token', app.oauth.grant());
+//
+// app.get('/oauth/authorise', function (req, res, next) {
+//     if (!req.session.userId) {
+//         return res.redirect('/session?redirect=' + req.path + '&client_id=' +
+//             req.query.client_id + '&redirect_uri=' + req.query.redirect_uri);
+//     }
+//
+//     res.render('authorise', {
+//         client_id: req.query.client_id,
+//         redirect_uri: req.query.redirect_uri
+//     });
+// });
+
+// // Handle authorise
+// app.post('/oauth/authorise', function (req, res, next) {
+//     if (!req.session.userId) {
+//         return res.redirect(`/session?redirect=${req.path}client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`);
+//     }
+//     next();
+// }, app.oauth.authCodeGrant(function (req, next) {
+//     // The first param should to indicate an error
+//     // The second param should a bool to indicate if the user did authorise the app
+//     // The third param should for the user/uid (only used for passing to saveAuthCode)
+//     next(null, req.body.allow === 'yes', req.session.userId, null);
+// }));
+
+// app.get('/secret', middleware.requiresUser, function (req, res) {
+//     res.send('Secret area');
+// });
+//
+// app.get('/account', middleware.requiresUser, routes.users.show);
+// app.get('/session', routes.session.show);
+// app.post('/v1/users', routes.users.create);
+// app.post('/session', routes.session.create);
+
+app.listen(app.get('port'), '0.0.0.0', (err) => {
     if (err) {
         console.log(err);
     }
-    console.info("==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.", port, port);
+    console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', app.get('port'), app.get('port'));
 });

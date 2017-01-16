@@ -17,7 +17,7 @@ const plugins = [
 ];
 
 const webpackConfig = {
-    entry: "./src/index.js",
+    entry: "./client/index.js",
     output: {
         path: buildPath,
         filename: "bundle.js",
