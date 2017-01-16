@@ -53,6 +53,8 @@ const generateTokens = (data, done) => {
     });
 };
 
+// todo: add code exchange https://github.com/jaredhanson/oauth2orize
+
 // Exchange username & password for access token.
 aserver.exchange(oauth2orize.exchange.password(function (client, username, password, scope, done) {
     User.findOne({username: username}, (err, user) => {

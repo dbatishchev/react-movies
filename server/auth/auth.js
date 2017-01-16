@@ -1,52 +1,52 @@
 const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
-const ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy;
+// const BasicStrategy = require('passport-http').BasicStrategy;
+// const ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 
 const config = require('../../config');
 const User = require('../models/user');
-const Client = require('../models/client');
+// const Client = require('../models/client');
 const AccessToken = require('../models/accessToken');
 
-passport.use(new BasicStrategy(
-    function (username, password, done) {
-        Client.findOne({clientId: username}, (err, client) => {
-            if (err) {
-                return done(err);
-            }
-
-            if (!client) {
-                return done(null, false);
-            }
-
-            if (client.clientSecret !== password) {
-                return done(null, false);
-            }
-
-            return done(null, client);
-        });
-    }
-));
-
-passport.use(new ClientPasswordStrategy(
-    function (clientId, clientSecret, done) {
-        Client.findOne({clientId: clientId}, (err, client) => {
-            if (err) {
-                return done(err);
-            }
-
-            if (!client) {
-                return done(null, false);
-            }
-
-            if (client.clientSecret !== clientSecret) {
-                return done(null, false);
-            }
-
-            return done(null, client);
-        });
-    }
-));
+// passport.use(new BasicStrategy(
+//     function (username, password, done) {
+//         Client.findOne({clientId: username}, (err, client) => {
+//             if (err) {
+//                 return done(err);
+//             }
+//
+//             if (!client) {
+//                 return done(null, false);
+//             }
+//
+//             if (client.clientSecret !== password) {
+//                 return done(null, false);
+//             }
+//
+//             return done(null, client);
+//         });
+//     }
+// ));
+//
+// passport.use(new ClientPasswordStrategy(
+//     function (clientId, clientSecret, done) {
+//         Client.findOne({clientId: clientId}, (err, client) => {
+//             if (err) {
+//                 return done(err);
+//             }
+//
+//             if (!client) {
+//                 return done(null, false);
+//             }
+//
+//             if (client.clientSecret !== clientSecret) {
+//                 return done(null, false);
+//             }
+//
+//             return done(null, client);
+//         });
+//     }
+// ));
 
 passport.use(new BearerStrategy(
     function (accessToken, done) {
