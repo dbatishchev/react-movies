@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 /**
  * @constructor
  */
 const MovieSchema = new mongoose.Schema({
-    name: String
-}, {collection: "movies"});
+    name: String,
+}, { collection: 'movies' });
 
-export default mongoose.model("Movie", MovieSchema);
+export default mongoose.model('Movie', MovieSchema);
