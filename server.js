@@ -6,6 +6,9 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express from "express";
 import cookieSession from "cookie-session";
+import {Strategy as VKontakteStrategy} from "passport-vkontakte";
+import {Strategy as FacebookStrategy} from "passport-facebook";
+import {Strategy as BearerStrategy} from "passport-http-bearer";
 import User from "./server/models/user";
 
 const app = express();
@@ -13,7 +16,6 @@ const app = express();
 app.set("env", process.env.NODE_ENV || "development");
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "server/views"));
-app.set("view engine", "jade");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -35,31 +37,107 @@ app.use(passport.session());
 
 passport.use(new VKontakteStrategy(
     {
-        clientID:     "5831449", // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
-        clientSecret: "RyJJO8FQHdm8x3YxfxlQ",
+        clientID:     "5831813", // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
+        clientSecret: "wNxqgTp4vSi20nZO5qUm",
         callbackURL:  "http://localhost:3000/auth/vkontakte/callback"
     },
-    function myVerifyCallbackFn(accessToken, refreshToken, params, profile, done) {
+    function successCallback(accessToken, refreshToken, params, profile, done) {
+        console.log("success: ", accessToken, params, profile);
         User.findOrCreate({ vkontakteId: profile.id })
-            .then(function (user) { done(null, user); })
+            .then((user) => {
+                user.accessToken = accessToken;
+                user.save().then(done(null, user));
+            })
             .catch(done);
     }
 ));
 
+passport.use(new FacebookStrategy(
+    {
+        clientID:     "1146609448793098",
+        clientSecret: "4eb060477de5409845e15ab039872237",
+        callbackURL:  "http://localhost:3000/auth/facebook/callback"
+    },
+    function successCallback(accessToken, refreshToken, params, profile, done) {
+        console.log("success: ", accessToken, params, profile);
+        User.findOrCreate({ facebookId: profile.id })
+            .then((user) => {
+                user.accessToken = accessToken;
+                user.save().then(done(null, user));
+            })
+            .catch(done);
+    }
+));
+
+passport.use(
+    new BearerStrategy(
+        function(token, done) {
+            User.findOne({ accessToken: token },
+                function(err, user) {
+                    if(err) {
+                        return done(err)
+                    }
+                    if(!user) {
+                        return done(null, false)
+                    }
+
+                    return done(null, user, { scope: "all" })
+                }
+            );
+        }
+    )
+);
+
+app.get(
+    "/auth/facebook",
+    passport.authenticate("facebook", { session: false, scope: [] })
+);
+
+app.get("/auth/facebook/callback",
+    passport.authenticate("facebook", { session: false, failureRedirect: "/" }),
+    function(req, res) {
+        res.redirect("/profile?access_token=" + req.user.access_token);
+    }
+);
+
 //This function will pass callback, scope and request new token
-app.get("/auth/vkontakte", passport.authenticate("vkontakte"));
+app.get(
+    "/auth/vkontakte",
+    passport.authenticate("vkontakte", {session: false})
+);
 
 app.get("/auth/vkontakte/callback",
     passport.authenticate("vkontakte", {
         successRedirect: "/",
-        failureRedirect: "/login"
-    })
+        failureRedirect: "/login",
+        session: false,
+    }),
+    function (req, res) {
+        console.log('1111', req, res);
+        res.redirect("/profile?accessToken=" + req.user.accessToken);
+    }
 );
 
-app.get("/", function(req, res) {
-    //Here you have an access to req.user
-    res.json(req.user);
-});
+app.get(
+    "/",
+    function(req, res) {
+        res.send("<a href=\"/auth/facebook\">Log in</a> | <a href=\"/auth/vkontakte\">Log in</a>");
+    }
+);
+
+app.get("/api/userinfo", passport.authenticate("bearer", {session: false}),
+    (req, res) => {
+        res.json({ userId: req.user.id, name: req.user.name, scope: req.authInfo.scope });
+    }
+);
+
+app.get(
+    "/profile",
+    passport.authenticate("bearer", { session: false }),
+    function(req, res) {
+        res.send("LOGGED IN as " + req.user.facebookId + " - <a href=\"/logout\">Log out</a>");
+    }
+);
 
 app.listen(app.get("port"), "0.0.0.0", (err) => {
     if (err) {
