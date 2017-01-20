@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const config = require('../../config');
+import mongoose from "mongoose";
 
-mongoose.connect(config.get('mongoose:uri'));
+// todo
+mongoose.connect("mongodb://localhost/movies");
 
 // var db = mongoose.connection;
 //

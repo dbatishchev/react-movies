@@ -9,6 +9,7 @@ import cookieSession from "cookie-session";
 import {Strategy as VKontakteStrategy} from "passport-vkontakte";
 import {Strategy as FacebookStrategy} from "passport-facebook";
 import {Strategy as BearerStrategy} from "passport-http-bearer";
+import db from "./server/db/mongoose";
 import User from "./server/models/user";
 
 const app = express();
@@ -42,7 +43,6 @@ passport.use(new VKontakteStrategy(
         callbackURL:  "http://localhost:3000/auth/vkontakte/callback"
     },
     function successCallback(accessToken, refreshToken, params, profile, done) {
-        console.log("success: ", accessToken, params, profile);
         User.findOrCreate({ vkontakteId: profile.id })
             .then((user) => {
                 user.accessToken = accessToken;
@@ -59,7 +59,6 @@ passport.use(new FacebookStrategy(
         callbackURL:  "http://localhost:3000/auth/facebook/callback"
     },
     function successCallback(accessToken, refreshToken, params, profile, done) {
-        console.log("success: ", accessToken, params, profile);
         User.findOrCreate({ facebookId: profile.id })
             .then((user) => {
                 user.accessToken = accessToken;
