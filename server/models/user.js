@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
-var User = new mongoose.Schema({
+const User = new mongoose.Schema({
     vkontakteId: {
-        type: String
+        type: String,
     },
     facebookId: {
-        type: String
+        type: String,
     },
-    access_token: {
-        type: String
+    accessToken: {
+        type: String,
     },
     created: {
         type: Date,
@@ -22,7 +22,7 @@ User.statics.findOrCreate = function(filters) {
         .find(filters)
         .then((results) => {
             if(results.length == 0) {
-                let newUser = new User();
+                let newUser = new this();
                 if (filters.facebookId) {
                     newUser.facebookId = filters.facebookId;
                 }

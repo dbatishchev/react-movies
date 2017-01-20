@@ -95,7 +95,7 @@ app.get(
 app.get("/auth/facebook/callback",
     passport.authenticate("facebook", { session: false, failureRedirect: "/" }),
     function(req, res) {
-        res.redirect("/profile?access_token=" + req.user.access_token);
+        res.redirect("/profile?access_token=" + req.user.accessToken);
     }
 );
 
