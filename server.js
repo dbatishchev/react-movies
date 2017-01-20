@@ -93,27 +93,26 @@ app.get(
 );
 
 app.get("/auth/facebook/callback",
-    passport.authenticate("facebook", { session: false, failureRedirect: "/" }),
+    passport.authenticate("facebook", {
+        session: false,
+    }),
     function(req, res) {
-        res.redirect("/profile?access_token=" + req.user.accessToken);
+        res.redirect("/?accessToken=" + req.user.accessToken);
     }
 );
 
 //This function will pass callback, scope and request new token
 app.get(
     "/auth/vkontakte",
-    passport.authenticate("vkontakte", {session: false})
+    passport.authenticate("vkontakte", { session: false })
 );
 
 app.get("/auth/vkontakte/callback",
     passport.authenticate("vkontakte", {
-        successRedirect: "/",
-        failureRedirect: "/login",
         session: false,
     }),
     function (req, res) {
-        console.log('1111', req, res);
-        res.redirect("/profile?accessToken=" + req.user.accessToken);
+        res.redirect("/?accessToken=" + req.user.accessToken);
     }
 );
 
