@@ -1,97 +1,69 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-// const routes = require('./server/routes');
-const path = require('path');
-// const models = require('./server/models');
-// const middleware = require('./server/middleware');
-const passport = require('passport');
-const errorhandler = require('errorhandler');
-
-const oauth2 = require('./server/auth/oauth2');
-const users = require('./server/routes/users');
-// const movies = require('./server/routes/movies');
+import errorhandler from "errorhandler";
+import passport from "passport";
+import path from "path";
+import methodOverride from "method-override";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import express from "express";
+import cookieSession from "cookie-session";
+import User from "./server/models/user";
 
 const app = express();
 
-app.set('env', process.env.NODE_ENV || 'development');
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'server/views'));
-app.set('view engine', 'jade');
+app.set("env", process.env.NODE_ENV || "development");
+app.set("port", process.env.PORT || 3000);
+app.set("views", path.join(__dirname, "server/views"));
+app.set("view engine", "jade");
 
-// app.locals.title = 'OAuth Example';
-// app.locals.pretty = true;
-
-app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser('ncie0fnft6wjfmgtjz8i'));
 app.use(cookieParser());
 app.use(cookieSession({
-    name: 'session',
-    keys: ['key1', 'key2'],
+    name: "session",
+    keys: ["key1", "key2"],
     maxAge: 48 * 60 * 60 * 1000,
 }));
 app.use(methodOverride());
 app.use(passport.initialize());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-// app.oauth = oauthserver({
-//     model: models.oauth,
-//     grants: ['password', 'authorization_code', 'refresh_token'],
-//     debug: true,
-// });
-
-if (app.get('env') === 'development') {
+if (app.get("env") === "development") {
     app.use(errorhandler());
 }
 
-// app.get('/', middleware.loadUser, routes.index);
+app.use(passport.initialize());
+app.use(passport.session());
 
-// app.use('/api/movies', movies);
-app.use('/api/users', users);
-app.use('/api/oauth/token', oauth2.token);
+passport.use(new VKontakteStrategy(
+    {
+        clientID:     "5831449", // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
+        clientSecret: "RyJJO8FQHdm8x3YxfxlQ",
+        callbackURL:  "http://localhost:3000/auth/vkontakte/callback"
+    },
+    function myVerifyCallbackFn(accessToken, refreshToken, params, profile, done) {
+        User.findOrCreate({ vkontakteId: profile.id })
+            .then(function (user) { done(null, user); })
+            .catch(done);
+    }
+));
 
-// app.all('/oauth/token', app.oauth.grant());
-//
-// app.get('/oauth/authorise', function (req, res, next) {
-//     if (!req.session.userId) {
-//         return res.redirect('/session?redirect=' + req.path + '&client_id=' +
-//             req.query.client_id + '&redirect_uri=' + req.query.redirect_uri);
-//     }
-//
-//     res.render('authorise', {
-//         client_id: req.query.client_id,
-//         redirect_uri: req.query.redirect_uri
-//     });
-// });
+//This function will pass callback, scope and request new token
+app.get("/auth/vkontakte", passport.authenticate("vkontakte"));
 
-// // Handle authorise
-// app.post('/oauth/authorise', function (req, res, next) {
-//     if (!req.session.userId) {
-//         return res.redirect(`/session?redirect=${req.path}client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`);
-//     }
-//     next();
-// }, app.oauth.authCodeGrant(function (req, next) {
-//     // The first param should to indicate an error
-//     // The second param should a bool to indicate if the user did authorise the app
-//     // The third param should for the user/uid (only used for passing to saveAuthCode)
-//     next(null, req.body.allow === 'yes', req.session.userId, null);
-// }));
+app.get("/auth/vkontakte/callback",
+    passport.authenticate("vkontakte", {
+        successRedirect: "/",
+        failureRedirect: "/login"
+    })
+);
 
-// app.get('/secret', middleware.requiresUser, function (req, res) {
-//     res.send('Secret area');
-// });
-//
-// app.get('/account', middleware.requiresUser, routes.users.show);
-// app.get('/session', routes.session.show);
-// app.post('/v1/users', routes.users.create);
-// app.post('/session', routes.session.create);
+app.get("/", function(req, res) {
+    //Here you have an access to req.user
+    res.json(req.user);
+});
 
-app.listen(app.get('port'), '0.0.0.0', (err) => {
+app.listen(app.get("port"), "0.0.0.0", (err) => {
     if (err) {
         console.log(err);
     }
-    console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', app.get('port'), app.get('port'));
+    console.info("==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.", app.get("port"), app.get("port"));
 });
