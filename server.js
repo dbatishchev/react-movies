@@ -12,6 +12,10 @@ import {Strategy as BearerStrategy} from "passport-http-bearer";
 import db from "./server/db/mongoose";
 import User from "./server/models/user";
 
+//routes
+import movies from './server/routes/movies';
+
+const isDeveloping = process.env.NODE_ENV !== 'production';
 const app = express();
 
 app.set("env", process.env.NODE_ENV || "development");
@@ -116,13 +120,6 @@ app.get("/auth/vkontakte/callback",
     }
 );
 
-app.get(
-    "/",
-    function(req, res) {
-        res.send("<a href=\"/auth/facebook\">Log in</a> | <a href=\"/auth/vkontakte\">Log in</a>");
-    }
-);
-
 app.get("/api/userinfo", passport.authenticate("bearer", {session: false}),
     (req, res) => {
         res.json({ userId: req.user.id, name: req.user.name, scope: req.authInfo.scope });
@@ -136,6 +133,42 @@ app.get(
         res.send("LOGGED IN as " + req.user.facebookId + " - <a href=\"/logout\">Log out</a>");
     }
 );
+
+app.use('/api/', movies);
+
+if (isDeveloping) {
+    const webpack = require("webpack");
+    const webpackMiddleware = require("webpack-dev-middleware");
+    const config = require("./webpack.config.js");
+
+    const compiler = webpack(config);
+    const middleware = webpackMiddleware(compiler, {
+        publicPath: config.output.publicPath,
+        noInfo: true,
+        quiet: false,
+        lazy: false,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: true
+        },
+        stats: {
+            colors: true,
+        }
+    });
+
+    const bundlePath = path.join(__dirname, './public/build/index.html');
+
+    app.use(middleware);
+    app.get('*', function response(req, res) {
+        res.write(middleware.fileSystem.readFileSync(bundlePath));
+        res.end();
+    });
+} else {
+    app.use(express.static(__dirname + './public/build'));
+    app.get('*', function response(req, res) {
+        res.sendFile(path.join(__dirname, './public/build/index.html'));
+    });
+}
 
 app.listen(app.get("port"), "0.0.0.0", (err) => {
     if (err) {
