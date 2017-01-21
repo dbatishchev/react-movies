@@ -126,13 +126,13 @@ app.get("/api/userinfo", passport.authenticate("bearer", {session: false}),
     }
 );
 
-app.get(
-    "/profile",
-    passport.authenticate("bearer", { session: false }),
-    function(req, res) {
-        res.send("LOGGED IN as " + req.user.facebookId + " - <a href=\"/logout\">Log out</a>");
-    }
-);
+// app.get(
+//     "/profile",
+//     passport.authenticate("bearer", { session: false }),
+//     function(req, res) {
+//         res.send("LOGGED IN as " + req.user.facebookId + " - <a href=\"/logout\">Log out</a>");
+//     }
+// );
 
 app.use('/api/', movies);
 

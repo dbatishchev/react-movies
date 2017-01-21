@@ -9,11 +9,6 @@ let middlewares = [];
 // add the router middleware
 middlewares.push(routerMiddleware(browserHistory));
 
-// // add the freeze dev middleware
-// if (process.env.NODE_ENV !== 'production') {
-//     middlewares.push(freeze);
-// }
-
 // apply the middleware
 let middleware = applyMiddleware(...middlewares);
 
