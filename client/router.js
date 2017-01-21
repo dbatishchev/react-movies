@@ -20,6 +20,7 @@ function onAppInit(dispatch) {
         }
 
         if (!token) {
+            callback();
             return;
         }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Component } from 'react';
+import {Component} from 'react';
 
 export default class App extends Component {
     componentWillMount() {
@@ -8,7 +8,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{margin: '60px 0 0 0'}}>
                 {this.props.children}
             </div>
         );

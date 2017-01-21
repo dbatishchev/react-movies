@@ -9,7 +9,7 @@
     "server": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint --ext js --ext jsx src || exit 0",
-    "migrations": "node ./node_modules/mongodb-migrate -runmm"
+    "migrations": "mm migrate"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -22,6 +22,7 @@
     "express": "latest",
     "faker": "^3.1.0",
     "method-override": "^2.3.7",
+    "mongodb-migrations": "^0.8.5",
     "mongoose": "^4.7.6",
     "nconf": "^0.8.4",
     "node-oauth2-server": "^2.4.0",
@@ -53,8 +54,6 @@
     "babel-preset-stage-2": "^6.18.0",
     "babel-register": "^6.18.0",
     "babel-runtime": "^6.20.0",
-    "db-migrate": "^0.10.0-beta.20",
-    "db-migrate-mongodb": "^1.2.1",
     "eslint-config-airbnb": "^14.0.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "0.9.0",
