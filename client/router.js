@@ -28,10 +28,10 @@ function onAppInit(dispatch) {
             .then((response) => {
                 if (!response.error) {
                     localStorage.setItem('token', token);
-                    dispatch(meFromTokenSuccess(response.payload));
+                    dispatch(meFromTokenSuccess(response));
                 } else {
                     localStorage.removeItem('token');
-                    dispatch(meFromTokenFailure(response.payload));
+                    dispatch(meFromTokenFailure(response));
                 }
                 callback();
             });

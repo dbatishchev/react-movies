@@ -8,7 +8,7 @@ class Header extends Component {
                 <ul className="nav  nav-pills navbar-right">
                     <li style={{paddingRight: '10px'}} role="presentation">
                         <Link role="presentation" style={{color: '#996633', fontSize: '17px'}} to="/profile">
-                            {authenticatedUser.name}
+                            {user.userId}
                         </Link>
                     </li>
                     <li style={{paddingRight: '10px'}} role="presentation">
@@ -38,7 +38,7 @@ class Header extends Component {
     }
 
     renderLinks() {
-        const {user} = this.props;
+        const {user} = this.props.user;
         return (
             <div className="container">
                 <ul className="nav  nav-pills navbar-right">
@@ -54,8 +54,6 @@ class Header extends Component {
     };
 
     render() {
-        console.log('!!!!', this.props);
-
         return (
             <nav className="navbar navbar-default navbar-static-top">
                 <div id="navbar" className="navbar-collapse collapse">
