@@ -2,62 +2,56 @@ import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 
 class Header extends Component {
-    renderSignInLinks(user) {
+    renderSignInLinks() {
+        const {user} = this.props.user;
+
         if (user) {
             return (
-                <ul className="nav  nav-pills navbar-right">
-                    <li style={{paddingRight: '10px'}} role="presentation">
-                        <Link role="presentation" style={{color: '#996633', fontSize: '17px'}} to="/profile">
-                            {user.userId}
-                        </Link>
-                    </li>
-                    <li style={{paddingRight: '10px'}} role="presentation">
-                        <a style={{color: '#996633', fontSize: '17px'}} onClick={this.props.logout}
-                           href="javascript:void(0)">
-                            Log out
-                        </a>
-                    </li>
-                </ul>
+                <div id="navbar" className="collapse navbar-collapse">
+                    <ul className="nav navbar-nav pull-right">
+                        <li>
+                            <Link to="/profile">
+                                My Account
+                            </Link>
+                        </li>
+                        <li>
+                            <a onClick={this.props.logout}>
+                                Log out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             );
         }
 
         return (
-            <ul className="nav  nav-pills navbar-right">
-                <li style={{paddingRight: '10px'}} role="presentation">
-                    <Link role="presentation" style={{color: '#996633', fontSize: '17px'}} to="/signup">
-                        Sign up
-                    </Link>
-                </li>
-                <li style={{paddingRight: '10px'}} role="presentation">
-                    <Link style={{color: '#996633', fontSize: '17px'}} to="/signin">
-                        Sign in
-                    </Link>
-                </li>
-            </ul>
-        );
-    }
-
-    renderLinks() {
-        const {user} = this.props.user;
-        return (
-            <div className="container">
-                <ul className="nav  nav-pills navbar-right">
-                    <li style={{paddingRight: '10px'}} role="presentation">
-                        <Link style={{color: '#337ab7', fontSize: '17px'}} to="/posts/new">
-                            New Post
+            <div id="navbar" className="collapse navbar-collapse">
+                <ul className="nav navbar-nav pull-right">
+                    <li>
+                        <Link to="/signin">
+                            Sign in
                         </Link>
                     </li>
                 </ul>
-                {this.renderSignInLinks(user)}
             </div>
         );
-    };
+    }
 
     render() {
         return (
-            <nav className="navbar navbar-default navbar-static-top">
-                <div id="navbar" className="navbar-collapse collapse">
-                    {this.renderLinks()}
+            <nav className="navbar navbar-inverse navbar-fixed-top">
+                <div className="container">
+                    <div className="navbar-header">
+                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span className="sr-only">Toggle navigation</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                        </button>
+                        <a className="navbar-brand" href="/">Movies</a>
+                    </div>
+                    {this.renderSignInLinks()}
                 </div>
             </nav>
         );

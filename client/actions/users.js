@@ -33,7 +33,7 @@ export function meFromToken(token) {
 export function meFromTokenSuccess(currentUser) {
     return {
         type: ME_FROM_TOKEN_SUCCESS,
-        payload: currentUser,
+        payload: currentUser.data,
     };
 }
 
