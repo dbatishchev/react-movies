@@ -14,6 +14,8 @@ import User from "./server/models/user";
 
 //routes
 import movies from './server/routes/movies';
+import categories from './server/routes/categories';
+import persons from './server/routes/persons';
 
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const app = express();
@@ -135,6 +137,8 @@ app.get("/api/userinfo", passport.authenticate("bearer", {session: false}),
 // );
 
 app.use('/api/', movies);
+app.use('/api/', categories);
+app.use('/api/', persons);
 
 if (isDeveloping) {
     const webpack = require("webpack");
